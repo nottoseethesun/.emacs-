@@ -930,7 +930,6 @@ autosave-dir "\\1") t)))
  '(standard-indent 4)
  '(uniquify-buffer-name-style nil nil (uniquify))
  '(user-full-name "Christopher M. Balz")
- '(user-mail-address "christophermbalz@stanfordalumni.org")
  '(which-function-mode nil nil (which-func)))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
