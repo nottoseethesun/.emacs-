@@ -11,10 +11,9 @@
 ;; For example, this file is currently set for Unix.
 ;;
 ;; @author: Christopher M. Balz.
-;;          Feel free to e-mail me regarding this file at any of the addresses below:
-;;          christopherbalz@yahoo.com
-;;          christophermbalz@stanfordalumni.org
-
+;;     
+;; Find this file on github at: https://github.com/christopherbalz/.emacs-
+;;
 ;; General Notes:  It is often said that a new Emacs user should stay away from old, crusty
 ;;                 '.emacs' files from others.  However, the only way that I ever was able 
 ;;                 to get a reasonable return on the investment of my time put into setting
