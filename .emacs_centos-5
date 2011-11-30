@@ -665,24 +665,20 @@ autosave-dir "\\1") t)))
 ;;; Bracket/brace/parentheses highlighting:
    ;; The following is the command for Emacs 20.1 and later:
 (show-paren-mode 1)
-   ;; * Here is some Emacs Lisp that will make the % key show the matching
-   ;; parenthesis, like in vi.	In addition, if the cursor isn't over a
-   ;; parenthesis, it simply inserts a % like normal.  (`Parenthesis' actually
-   ;;  includes and character with `open' or `close' syntax, which usually means
-   ;;  "()[]{}".)
 
-      ;; By an unknown contributor
-
-      (global-set-key "%" 'match-paren)
-
-      (defun match-paren (arg)
-	"Go to the matching parenthesis if on parenthesis otherwise insert %."
-	(interactive "p")
-	(cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
-	      ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
-	      (t (self-insert-command (or arg 1)))))
-
-
+;; Makes the C-x% keybinding show the matching parenthesis (smooth, curly, or square braket).	
+;;    - http://www.emacswiki.org/emacs/ParenthesisMatching
+(global-set-key "\C-x%" 'goto-match-paren)
+(defun goto-match-paren (arg)
+  "Go to the matching parentheses if on (), {}, or [] "
+  (interactive "p")
+  ;; first, check for "outside of bracket" positions expected by forward-sexp, etc.
+  (cond ((looking-at "[\[\(\{]") (forward-sexp))
+        ((looking-back "[\]\)\}]" 1) (backward-sexp))
+        ;; now, try to succeed from inside of a bracket
+        ((looking-at "[\]\)\}]") (forward-char) (backward-sexp))
+        ((looking-back "[\[\(\{]" 1) (backward-char) (forward-sexp))
+        (t nil)))
 
 ;; The following functions enable on-the-fly switching between the bash shell and DOS:
 
