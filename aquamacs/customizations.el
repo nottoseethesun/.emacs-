@@ -2,8 +2,7 @@
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  ;; The 'Green' part below fixes an issue where the Help Window and other child windows dobn't take the values set in '.emacs':
+  ;; If there is more than one, they won't work right.  
  '(ansi-color-names-vector ["black" "red" "green" "yellow" "pink" "magenta" "cyan" "white"])
  '(appt-message-warning-time 60 t)
  '(aquamacs-additional-fontsets nil t)
@@ -13,7 +12,7 @@
  '(browse-url-generic-program "~/utils/firefox/firefox")
  '(calculator-number-digits 10)
  '(case-fold-search t)
- '(current-language-environment "Latin-1")                  
+ '(current-language-environment "Latin-1")            ;; The 'Green' part below fixes an issue where the Help Window and other child windows dobn't take the values set in '.emacs':      
  '(default-frame-alist (quote ((tool-bar-lines . 0) (menu-bar-lines . 1) (background-color . "Gray10") (foreground-color . "Green") (left . 0) (width . 141) (height . 44))))
  '(default-input-method "latin-1-prefix")
  '(dired-recursive-deletes (quote top))
