@@ -1,18 +1,23 @@
-;; This is a web programmer's .emacs file for GNU Emacs.
-;; It has been tested on GNU Emacs 23.2.1 (i686-pc-linux-gnu, X toolkit, Xaw3d scroll bars) of 2010-07-06
-;; on Centos 5 (kernel 2.6.18-194.el5) and on Windows XP, Service Pack 2.	 
+;; This is a web programmer's .emacs file for GNU Emacs on Mac.  
+;; 
+;; Note that due to the workings of the Aquamacs "skin" for Emacs that is used here, the companion file '~/Library/Preferences/Aquamacs Emacs/customizations.el' 
+;; has been included alongside this file, in the same directory.
+;;
+;; This file has been tested on the Aquamacs "skin" of GNU Emacs 23.3.50.1 (i386-apple-darwin9.8.0, NS apple-appkit-949.54) of 2011-10-25 on braeburn.aquamacs.org - Aquamacs Distribution 2.4, on Mac OS X Snow Leopard.
+;; A similar variant has also been tested on Ubuntu 10.1, Centos 5 (kernel 2.6.18-194.el5) and on Windows XP, Service Pack 2.	
 ;; 
 ;; The GNU Emacs Homepage is located at: 
 ;;             Http://www.gnu.org/directory/GNU/emacs.html
 ;;
-;; This Document Last Modified: 2010-07-06.
+;; This Document Last Modified: 2011-11-30.
 ;;
 ;; Portability: Comment out code for one platform and comment in the code for another.
 ;; For example, this file is currently set for Unix.
 ;;
 ;; @author: Christopher M. Balz.
 ;;     
-;; Find this file on github at: https://github.com/christopherbalz/.emacs-
+;; Find this file on github at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/.emacs
+;; Find its companion file (see above for details), 'customizations.el', at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/customizations.el
 ;;
 ;; General Notes:  It is often said that a new Emacs user should stay away from old, crusty
 ;;                 '.emacs' files from others.  However, the only way that I ever was able 

@@ -1,4 +1,5 @@
 ;; This is a web programmer's .emacs file for GNU Emacs.
+;;
 ;; It has been tested on GNU Emacs 23.2.1 (i686-pc-linux-gnu, X toolkit, Xaw3d scroll bars) of 2010-07-06
 ;; on Centos 5 (kernel 2.6.18-194.el5) and on Windows XP, Service Pack 2.	 
 ;; 
@@ -12,7 +13,7 @@
 ;;
 ;; @author: Christopher M. Balz.
 ;;     
-;; Find this file on github at: https://github.com/christopherbalz/.emacs-
+;; Find this file on github at: https://github.com/christopherbalz/.emacs-/blob/master/.emacs_centos-5
 ;;
 ;; General Notes:  It is often said that a new Emacs user should stay away from old, crusty
 ;;                 '.emacs' files from others.  However, the only way that I ever was able 
