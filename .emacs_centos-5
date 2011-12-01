@@ -249,20 +249,23 @@ autosave-dir "\\1") t)))
 
 ;; ----- End JavaScript Section 
 
+;; ----- Begin Mustache Template Editing Section: From https://github.com/mustache/emacs/blob/master/mustache-mode.el  @to-do: Come up with a way in Emacs to match '.html' that's not '.mu.html'.
+(require 'mustache-mode)
+(setq auto-mode-alist
+      (cons '("\\.mu\\.\\(html\\)\\'" . mustache-mode)
+	      auto-mode-alist))
+;; ----- End Mustache Template Editing Section
 
 ;; ----- Begin XML--XSL--HTML Editing Section
 (setq auto-mode-alist
-      (cons '("\\.\\(fo\\|xml\\|xsl\\|xsd\\|rng\\|html\\|xhtml\\)\\'" . nxml-mode)
+      (cons '("\\.\\(fo\\|xml\\|xsl\\|xsd\\|rng\\|xhtml\\)\\'" . nxml-mode)
 	      auto-mode-alist))
 
  (defun my-nxml-indent-setup ()
    (setq indent-tabs-mode nil) )
  ;; Add the above hook to the nxml-mode.
  (add-hook 'nxml-mode-hook 'my-nxml-indent-setup)
-
-;;
 ;; ----- End XML--XSL--HTML Editing Section
-
 
 ;; XSL mode -- turned off since this has no validation; using nXML mode instead.
 ;; (autoload 'xsl-mode "xslide" "Major mode for XSL stylesheets." t)
