@@ -1,62 +1,75 @@
-;; This is a web programmer's .emacs file for GNU Emacs on Mac.  
-;; 
-;; Note that due to the workings of the Aquamacs "skin" for Emacs that is used here, the companion file '~/Library/Preferences/Aquamacs Emacs/customizations.el' 
+;; This is a web programmer's .emacs file for GNU Emacs on Mac.
+;;
+;; Note that due to the workings of the Aquamacs "skin" for Emacs that is used here, the companion file '~/Library/Preferences/Aquamacs Emacs/customizations.el'
 ;; has been included alongside this file, in the same directory.
 ;;
 ;; This file has been tested on the Aquamacs "skin" of GNU Emacs 23.3.50.1 (i386-apple-darwin9.8.0, NS apple-appkit-949.54) of 2011-10-25 on braeburn.aquamacs.org - Aquamacs Distribution 2.4, on Mac OS X Snow Leopard.
-;; A similar variant has also been tested on Ubuntu 10.1, Centos 5 (kernel 2.6.18-194.el5) and on Windows XP, Service Pack 2.	
-;; 
-;; The GNU Emacs Homepage is located at: 
+;; A similar variant has also been tested on Ubuntu 10.1, Centos 5 (kernel 2.6.18-194.el5) and on Windows XP, Service Pack 2.
+;;
+;; M-x version:
+;;        GNU Emacs 23.3.50.1 (i386-apple-darwin9.8.0, NS apple-appkit-949.54) of 2011-10-25 on braeburn.aquamacs.org - Aquamacs Distribution 2.4
+;;
+;; The GNU Emacs Homepage is located at:
 ;;             Http://www.gnu.org/directory/GNU/emacs.html
 ;;
-;; This Document Last Modified: 2011-11-30.
+;; This Document Last Modified: 2012-09-17.
 ;;
 ;; Portability: Comment out code for one platform and comment in the code for another.
 ;; For example, this file is currently set for Unix.
 ;;
 ;; @author: Christopher M. Balz.
-;;     
-;; Find this file on github at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/.emacs
-;; Find its companion file (see above for details), 'customizations.el', at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/customizations.el
+;;
+;; Aquamacs Users:
+;;   Find this file on github at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/.emacs
+;;   Find its companion file (see above for details), 'customizations.el', at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/customizations.el
 ;;
 ;; General Notes:  It is often said that a new Emacs user should stay away from old, crusty
-;;                 '.emacs' files from others.  However, the only way that I ever was able 
+;;                 '.emacs' files from others.  However, the only way that I ever was able
 ;;                 to get a reasonable return on the investment of my time put into setting
 ;;                 up my Emacs configurations was by borrowing code snippets from others.
 ;;                 It is true that no '.emacs' file should be used uncritically, by newbie or
-;;                 by others.  
-;;               
-;;                 However, for the best user base, new users should be able to 
+;;                 by others.
+;;
+;;                 However, for the best user base, new users should be able to
 ;;                 fairly easily clip out sections of '.emacs' files that interest them and put
 ;;                 them to use right away in their own '.emacs' files.  To this end, I have
 ;;                 attempted to effectively segment the various independent components of this
 ;;                 '.emacs' file and have documented what I have done as clearly as possible.
-;;                 It's very exciting how Emacs modes related to software engineering for the 
-;;                 web are maturing.  
-;;     
-
-;; ------------   Invocation of Gnu Emacs on Windows: 
+;;                 It's very exciting how Emacs modes related to software engineering for the
+;;                 web are maturing.
 ;;
-;;    
-;;    First, set user-specific 'HOME' environment variable to 'C:/cygwin/home/Christopher Balz/' 
-;;    (substituting whatever your home directory is), which is 
+
+;; ------------   Invocation of Gnu Emacs on Windows:
+;;
+;;
+;;    First, set user-specific 'HOME' environment variable to 'C:/cygwin/home/Christopher Balz/'
+;;    (substituting whatever your home directory is), which is
 ;;    the directory in which your '.emacs' file is located.  Do this by going to the 'Control Panel',
 ;;    then to 'System', then to 'Advanced', then to 'Environment Variables', the to 'Variables
-;;    for <user>'. 
+;;    for <user>'.
 ;;
 ;;    Next, run the 'addpm.exe' program to install Emacs on Windows.  You don't have to do this,
 ;;    and can do the necessary tasks to run Emacs on Windows manually, but this is the best way to go.
-;; 
-;;    If you experience temporary "blanking out" of the screen when you select one of the two Emacs windows 
+;;
+;;    If you experience temporary "blanking out" of the screen when you select one of the two Emacs windows
 ;;    (meaning specifically the Windows command line), select 'Properties' on the Emacs short cut,
 ;;    select the 'Options' tab, select the 'Window' radio button, and then select 'Ok' and 'Save
-;;    for future sessions.'  If you run Windows command programs from Emacs, such as Cygwin, you 
-;;    may also get "blanking out" of the screen unless you run "Command" from the Windows "Run" option 
+;;    for future sessions.'  If you run Windows command programs from Emacs, such as Cygwin, you
+;;    may also get "blanking out" of the screen unless you run "Command" from the Windows "Run" option
 ;;    on the "Start" menu, right-click on the window title bar, select 'Default',
 ;;    and perform the same property change just described, selecting "Window" instead of "Full Screen".
 ;;
-             
+
 ;; ------------  Commense lisping:
+
+;; Begin: Turn off unnecessary gui elements:
+(if (not(eq (boundp 'tabbar) nil))
+    (tabbar-mode -1)          ;; hide the tab bar that just recently became turned on by default in some flavors of Emac, around Emacs v23..
+)
+;; Hide the tool-bar, in case it appears.  Note that on Aquamacs, per http://www.emacswiki.org/emacs/AquamacsFAQ , it's a setting in the Aquamacs 'customizations.el' (mentioned above).
+;;    E.g.:  “Options → Appearance → Adopt Face and Frame Parameters as Frame Default”. Then choose “Options → Save Options”.
+(tool-bar-mode -1)
+;; End: Turn off unnecessary gui elements.
 
 ;; Provide a useful error trace if loading this .emacs fails.
 ;; (setq debug-on-error t)
@@ -79,6 +92,9 @@
 ;; (defun mouse-yank-at-click (event)
 ;; )
 
+
+;; Begin: Set character/file encoding - - - -
+
 ;; (set-buffer-file-coding-system 'iso-latin-1-unix t)
 ;; Use the utf8-unix file format always:
 (set-buffer-file-coding-system 'utf-8-unix t) ;; Unicode.
@@ -87,7 +103,10 @@
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
-;; This is key for handling shell processes that output utf-8 characters. 
+;; End: Set character/file encoding - - - -
+
+
+;; This is key for handling shell processes that output utf-8 characters.
 ;; Some will tell you they failed with a utf-8 char, in which case it's helpful to be able to see it.
 (defun u-shell ()
   "Create Shell that supports UTF-8."
@@ -95,9 +114,9 @@
   (set-default-coding-systems 'utf-8)
   (shell))
 
-;; Add the site directory (the site directory is used to contain non-core Emacs Lisp packages) 
-;; to the Emacs load-path.  The Emacs load-path is 
-;; the list of directories where Emacs searches for packages that you require. 
+;; Add the site directory (the site directory is used to contain non-core Emacs Lisp packages)
+;; to the Emacs load-path.  The Emacs load-path is
+;; the list of directories where Emacs searches for packages that you require.
 ;; This must be at the head of your .emacs file.  This code prepends the site directory to the load path:
 
 ;; Standard emacs lisp access (for non-byte-compiled access):
@@ -110,17 +129,18 @@
 
 ;; For Mac: MacPorts.  Note that this will augment the load-paths that Aquamacs uses (to see them, check your load-path variable via C-h v load-path).
 (add-to-list 'load-path (expand-file-name "/opt/local/share/emacs/site-lisp/")) ;; Note that these show up before Aquamacs paths.
-(add-to-list 'load-path (expand-file-name "/opt/local/share/emacs/site-lisp/w3m")) 
+(add-to-list 'load-path (expand-file-name "/opt/local/share/emacs/site-lisp/w3m"))
+(add-to-list 'load-path (expand-file-name "/opt/local/share/emacs/site-lisp/magit"))
 
 ;; Personal emacs/site:
 (setq load-path (cons (expand-file-name "~/emacs/site/") load-path)) ;; Prepends to override analogous system libs.
 ;; (add-to-list 'load-path (expand-file-name "~/emacs/site/")) ;; Append to let analogous system libs take precedence.
 ;; So that Emacs can find the home directory files (desktop, etc.):
-(add-to-list 'load-path (expand-file-name "~/")) 
+(add-to-list 'load-path (expand-file-name "~/"))
 ;; Specific Packages:
 
-;;(add-to-list 'load-path (expand-file-name "~/emacs/site/xslide/")) 
-;;(add-to-list 'load-path (expand-file-name "~/emacs/site/nxml-mode-20041004/")) 
+;;(add-to-list 'load-path (expand-file-name "~/emacs/site/xslide/"))
+;;(add-to-list 'load-path (expand-file-name "~/emacs/site/nxml-mode-20041004/"))
 
 ;; - - - - Begin Image Section
 
@@ -131,7 +151,7 @@
 )
 
 ;; Eimp Minor Mode
-;; 
+;;
 ;; This package allows interactive image manipulation from within
 ;; Emacs.  It uses the mogrify utility from ImageMagick to do the
 ;; actual transformations.
@@ -148,6 +168,27 @@
 (add-hook 'image-mode-hook 'eimp-mode)
 
 ;; - - - - End Image Section
+
+;; - - - Begin woman set-up, to be able to do 'esc-x woman' to view man pages.
+(if (getenv "MANPATH")
+  ;; Then do nothing: woman will just use the system manpath (works on Mac OS X with MacPorts, etc).
+
+  ;; Else, use a rhel set-up.  This code path here of course will not run the fail-overs built into woman (which don't work on rhel), as described here: http://www.gnu.org/software/emacs/manual/html_node/woman/Topic.html
+
+  ;;     On many Linux systems, such as rhel, the MANPATH environment variable is not set.  Instead, 'man' uses a script, such as rhel's '/etc/man.config', that woman doesn't understand.  So in that case we
+  ;;     do this manual configuration.  The values below are pasted from there.
+  (setq woman-manpath '("/usr/man"
+                        "/usr/share/man"
+                        "/usr/local/man"
+                        "/usr/local/share/man"
+                        "/usr/X11R6/man"
+                        "/opt/*/man"
+                        "/usr/lib/*/man"
+                        "/usr/share/*/man"
+                        "/usr/kerberos/man")))
+
+(autoload 'woman "woman" "Browse man pages." t)
+;; - - - End woman set-up
 
 ;; JDEE Dependencies
 ;;(add-to-list 'load-path (expand-file-name "~/emacs/site/jde/lisp"))
@@ -200,10 +241,10 @@
 ;; (add-to-list 'load-path (expand-file-name "c:/Progra~1/emacs/site/promela/"))
 
 
-;; On Windows 2000, it is sufficient to set the user-specific 'HOME' environment 
+;; On Windows 2000, it is sufficient to set the user-specific 'HOME' environment
 ;; variable (see above) to the path to your .emacs file.  For example, mine goes to:
-;; 'C:/cygwin/home/Christopher Balz'.  Most other systems should have a 
-;; reasonably sane approach to doing this.  These approaches are best. 
+;; 'C:/cygwin/home/Christopher Balz'.  Most other systems should have a
+;; reasonably sane approach to doing this.  These approaches are best.
 ;; However, if on some other system you have
 ;; trouble saving your customizations (meaning, the customizations possible
 ;; through the command ESC-x customize-group, and meaning, the error message
@@ -226,7 +267,7 @@
 ;;                "c:/cygwin/bin"
 ;;                "c:/Progra~1/emacs/site/w3m-0.5.1"
 ;;                )
-;;               exec-path)) 
+;;               exec-path))
 ;; (setenv "PATH" (concat "c:\\cygwin\\bin;c:\\Progra~1\\emacs\\site\\w3m-0.5.1;" (getenv "PATH")))
 ;;
 ;;; Add Cygwin Info pages
@@ -238,28 +279,28 @@
 ;; (setq explicit-bash-args '("--login" "--init-file" "c:/home/cbalz/.bash_profile" "-i"))  ;; For Cygwin (on Windows) Only.
 (setq explicit-shell-file-name shell-file-name)   ;; Leave this line regardless of host o/s (Unix, Win, etc).
 ;; Use ANSI colors within shell-mode
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on) 
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 ;; End of bash shell use section.
 
 ;; This removes unsightly ^M characters that would otherwise appear in the output of code saved in DOS format.
 (add-hook 'comint-output-filter-functions
 	  'comint-strip-ctrl-m)
 
-;; Set start-up directory with Unix nomenclature 
+;; Set start-up directory with Unix nomenclature
 ;; (your configuration files _must_ be in this directory):
 (setq startup-directory "~/")
 
 ;; Put autosave files (ie #foo#) in one place, *not*
 ;; scattered all over the file system!  '#' files will crash a variety of directory-reading programs.
 ;; Courtesy: http://cheat.errtheblog.com/s/emacs_tips/
-;; 
+;;
 (defvar autosave-dir
  ;; Use this by default: (concat "/tmp/emacs_autosaves/" (user-login-name) "/"))
  ;; Use this if the contents of '/tmp' can get deleted:
  (concat "~/tmp/emacs_autosaves/" (user-login-name) "/"))
 (make-directory autosave-dir t)
 (setq auto-save-file-name-transforms `(("\\(?:[^/]*/\\)*\\(.*\\)" ,(concat
-autosave-dir "\\1") t)))
+																	autosave-dir "\\1") t)))
 
 ;; Put backup files (ie foo~) in one place too. (The backup-directory-alist
 ;; list contains regexp=>directory mappings; filenames matching a regexp are
@@ -267,21 +308,26 @@ autosave-dir "\\1") t)))
 (defvar backup-dir (concat "/tmp/emacs_backups/" (user-login-name) "/"))
 (setq backup-directory-alist (list (cons "." backup-dir)))
 
-;; ----- Begin JavaScript Section 
-;; http://code.google.com/p/js2-mode/
-(autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)) ;; '.json' files do not work well at the time of this writing with 'js2' mode (JavaScript-IDE).
-(add-to-list 'auto-mode-alist '("\\.json$" . javascript-mode)) ;; See comment directly above.  'javascript-mode' is built-in to Emacs and works with json.
 
-;; An optional Javascript mode for shellserver to Mozilla 
+;; ----- Begin JavaScript Section
+
+(autoload 'js2-mode "js2" nil t) ;; http://code.google.com/p/js2-mode/
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)) ;; '.json' files do not work well at the time of this writing with 'js2' mode (JavaScript-IDE).
+(autoload 'json-mode "json-mode" nil t) ;; https://github.com/joshwnj/json-mode
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
+
+;; An optional Javascript mode for shellserver to Mozilla
 ;; See https://sekhmet.acceleration.net/ADW/JsShellServer
 ;;(add-hook 'javascript-mode-hook 'js-mode)
 ;;(autoload 'js-mode "js-mode" nil t)
 
-;; This is the container for my custom js editing mode  
+(global-set-key [(control tab)] 'dabbrev-expand) ;; Identifier completion (autocomplete/autocompletion)!
+
+;; This is the container for my custom js editing mode
 (defun my-js-indent-setup ()
  (setq c-default-style "bsd") ;; bsd stroustroup
- (setq indent-tabs-mode nil)
+ ;; (setq indent-tabs-mode t)        ;; turn on tabs for js
+ (setq indent-tabs-mode nil)   ;; turn off tabs for js
  (setq c-basic-offset 4)
  (lambda () (js-mode 1))
  (js-mode 1))
@@ -290,14 +336,18 @@ autosave-dir "\\1") t)))
 ;;(add-hook 'javascript-mode-hook 'my-js-indent-setup)
 (add-hook 'js2-mode-hook 'my-js-indent-setup)
 
-;; ----- End JavaScript Section 
+;; ----- End JavaScript Section
 
-;; ----- Begin Mustache Template Editing Section: From https://github.com/mustache/emacs/blob/master/mustache-mode.el  @to-do: Come up with a way in Emacs to match '.html' that's not '.mu.html'.
+
+;; ----- Begin Handlebars/Mustache Template Editing Section: From https://github.com/mustache/emacs/blob/master/mustache-mode.el  @to-do: Come up with a way in Emacs to match '.html' that's not '.mu.html'.
 (require 'mustache-mode)
 (setq auto-mode-alist
       (cons '("\\.mu\\.\\(html\\)\\'" . mustache-mode)
 	      auto-mode-alist))
-;; ----- End Mustache Template Editing Section
+(setq auto-mode-alist
+      (cons '("\\.hb\\.\\(html\\)\\'" . mustache-mode)
+	      auto-mode-alist))
+;; ----- End Handlebars/Mustache Template Editing Section
 
 ;; ----- Begin XML--XSL--HTML Editing Section
 (setq auto-mode-alist
@@ -308,6 +358,8 @@ autosave-dir "\\1") t)))
    (setq indent-tabs-mode nil) )
  ;; Add the above hook to the nxml-mode.
  (add-hook 'nxml-mode-hook 'my-nxml-indent-setup)
+
+;;
 ;; ----- End XML--XSL--HTML Editing Section
 
 
@@ -374,17 +426,18 @@ autosave-dir "\\1") t)))
 ;;     	  (message "Starting Firefox...")
 ;;     	  (start-process (concat "firefox " url) nil "~/utils/firefox/firefox" url)
 ;;     	  (message "Starting Firefox...done"))))
-;; 
+;;
 ;; -------- End Firefox Section
 
 
-;; ;; --------- Begin w3m Section (HTML browser) 
+;; ;; --------- Begin w3m Section (HTML browser)
 
 ;; ;;;======================================================================
 ;; ;;; w3m browser mode:
 ;; ;;;======================================================y================
-(require 'w3m-load)
-;; ;;; This integrates the external program w3m with emacs. 
+;; See the info near the top of the file about w3m.
+;;  (require 'w3m-load)
+;; ;;; This integrates the external program w3m with emacs.
 ;; ;; (setq w3m-command (concat "c:/Progra~1/emacs/site/w3m-0.5.1/w3m.exe" ""))
 ;; ;; Commented out while w3m is broken (setq w3m-browse-url (concat "c:/Progra~1/emacs/site/w3m-0.5.1/w3m.exe" ""))
 ;; ;; (setq w3m-find-file (concat "c:/Progra~1/emacs/site/w3m-0.5.1/w3m.exe" ""))
@@ -420,7 +473,7 @@ autosave-dir "\\1") t)))
 ;; ;; (autoload 'w3m-weather "w3m-weather" "Display weather report." t)
 ;; ;; (autoload 'w3m-antenna "w3m-antenna" "Report change of WEB sites." t)
 ;; ;; (autoload 'w3m-namazu "w3m-namazu" "Search files with Namazu." t)
-;; ;; 
+;; ;;
 
 ;; ;;; external browser in which to view pages/graphics
 ;; ;; (if (eq window-system 'w32)
@@ -440,36 +493,17 @@ autosave-dir "\\1") t)))
 ;; ;;   ("application/postscript" "\\.\\(ps\\|eps\\)$" w32-shellex-on-object file)
 ;; ;;   ("application/pdf" "\\.pdf$" w32-shellex-on-object file))
 ;; ;;    ))
-;; ;; 
-;; ;; 
-;; ;; -------- End w3m Section (HTML browser) 
+;; ;;
+;; ;;
+;; ;; -------- End w3m Section (HTML browser)
 
 
-;; -------- Begin JavaScript editing section. -------- 
+;; -------- End JavaScript editing section. --------
 
-;; This is my way of loading c-mode and hooking .js files to it, 
-;; not superseded by the JavaScript mode in generic-x.el (see above).  
-;; (autoload 'cc-mode "cc-mode.elc")
-;; (setq auto-mode-alist (cons '("\\.js$" . c-mode) auto-mode-alist))
 
-;; This is the container for my custom js editing mode  
-;;(defun my-js-indent-setup ()
-;;  (setq c-default-style "bsd") ;; bsd stroustroup
-;;  (setq indent-tabs-mode nil)
-;;  (setq c-basic-offset 4)
-;;  (lambda () (js-mode 1))
-;;  (js-mode 1))
+;; -------- Begin XML and SGML Editing Section --------
 ;;
-;; Add the above hook to the c-mode.
-;;(add-hook 'c-mode-hook 'my-js-indent-setup)
-
-
-;; -------- End JavaScript editing section. -------- 
-
-
-;; -------- Begin XML and SGML Editing Section --------  
-;;
-;; -> Note: this handles HTML also but 
+;; -> Note: this handles HTML also but
 ;; a formal DTD declaration is needed for that.  Instead, I use
 ;; html-helper-mode, which handles embedded scripts as well.
 ;; -> From: http://www.lysator.liu.se/~lenst/about_psgml/
@@ -477,17 +511,17 @@ autosave-dir "\\1") t)))
 ;; PSGML needs to know where to find the SGML catalog files. There are a couple
 ;;  of ways to accomplish this, as described in the PSGML documentation. I use the method
 ;;  that makes use of the environment variable SGML_CATALOG_FILES because it is
-;;  also used by the SGML parser (patience, I come to it in the next section of this article). 
-;;  So, now that you have a set of DTDs and a catalog file, create the afore-mentioned 
-;; environment variable and set it to include the path to your xhtml1.soc file, for 
-;; example d:\DTDs\xhtml1\xhtml1.soc. If you have more that one catalog file, 
-;; you can include them all, separating them with a path delimiter (";" on Windows, 
+;;  also used by the SGML parser (patience, I come to it in the next section of this article).
+;;  So, now that you have a set of DTDs and a catalog file, create the afore-mentioned
+;; environment variable and set it to include the path to your xhtml1.soc file, for
+;; example d:\DTDs\xhtml1\xhtml1.soc. If you have more that one catalog file,
+;; you can include them all, separating them with a path delimiter (";" on Windows,
 ;; ":" on UNIX-based systems).
 ;; Here is my value: c:\Progra~1\dtds\xhtml1\xhtml1.soc;c:\Progra~1\dtds\hodmacro\hodmacro.soc
 
 ;; (require 'sgml-mode "psgml.ael" "Major mode to edit SGML files.")
 ;; (autoload 'xml-mode "psgml.el" "Major mode to edit XML." t)
-;; (setq auto-mode-alist 
+;; (setq auto-mode-alist
 ;;       (append '(
 ;; 		("\\.sgml$" . sgml-mode)
 ;; 		("\\.idd$" . sgml-mode)
@@ -539,25 +573,25 @@ autosave-dir "\\1") t)))
 ;; 	 "<?xml version=\"1.0\"?>\n<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.1.2//EN\" \"http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd\" [\n]>")
 ;;        )
 ;; )
-;; 
+;;
 ;; (define-key sgml-mode-map "\C-i" 'sgml-insert-element)
 ; override default validate command to utilize OpenSP's onsgmls executable
 ;;(setq sgml-validate-command "onsgmls -s %s %s")
 ; override default xml-mode validate command to utilize OpenSP's onsgmls
-; executable by using a mode-hook, since there appears to be no other means 
-; to accomplish it.  
+; executable by using a mode-hook, since there appears to be no other means
+; to accomplish it.
 ;; (defun my-psgml-xml-hook ()
 ;;   (setq sgml-validate-command "onsgmls -s %s %s")
 ;;   (setq sgml-declaration "C:\Progra~1\openjade-1.3.1\pubtext\xml.dcl")
 ;; )
 ;; (add-hook 'xml-mode-hook 'my-psgml-xml-hook)
-;;             
-;; 
-;; -- End psgml / xml section -------- 
+;;
+;;
+;; -- End psgml / xml section --------
 
 
-;; --- Begin HTML editing section: 
-;; 
+;; --- Begin HTML editing section:
+;;
 ;; See nXML section: using nXML now for HTML editing.
 ;;
 ;; I require html helper mode because the hhm-config.el code seems to
@@ -573,18 +607,25 @@ autosave-dir "\\1") t)))
 ;;(require 'jsp-html-helper-mode "jsp-html-helper-mode.el")
 ;;(setq auto-mode-alist (cons '("\\.jsp$" . jsp-html-helper-mode) auto-mode-alist))
 
-;; ----- CSS mode. 
-;; This is for the css-mode (will not be necessary in later versions; it should 
+;; ----- CSS mode.
+;; This is for the css-mode (will not be necessary in later versions; it should
 ;; be in the css-mode code itself):
-;;(require 'apropos)  
+;;(require 'apropos)
 
 ;; For css-mode: (from http://synthcode.com/emacs/lang/css-mode.el )
-;; I added customizations in that mode file itself to get c-style indenting, per 
+;; I added customizations in that mode file itself to get c-style indenting, per
 ;; the in-file instructions.  Also I added a newline just after opening braces.
 ;;(autoload 'css-mode "css-mode.el")
-;; (setq auto-mode-alist	     
+;; (setq auto-mode-alist
 ;;      (cons '("\\.css$" . css-mode) auto-mode-alist))
 ;; ----- End CSS mode.
+
+;; ----- Begin Sass Mode
+(require 'sass-mode)
+;; ----- End Sass Mode
+;; ----- Begin Sass scss flavor Mode
+(require 'scss-mode)
+;; ----- End Sass scss flavor Mode
 
 ;; Make sure that .emacs file is edited in lisp mode:
 (setq auto-mode-alist (cons '("\.emacs" . lisp-mode)        auto-mode-alist))
@@ -593,7 +634,7 @@ autosave-dir "\\1") t)))
 ;; There are also some variables set via the Emacs Customization Utility.
 ;; See the end of the file for those.
 ;; Read the diary:
-(diary) 
+(diary)
 
 ;; Fancy display for Calendar
 ;; Here is some code to make your calendar and diary display fancier:
@@ -603,11 +644,20 @@ autosave-dir "\\1") t)))
  (add-hook 'diary-display-hook 'fancy-diary-display)
  (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
 
+;; Begin mode-line customization:
 ;; Show column number on mode line.
 (column-number-mode t)
 ;; Show time on mode line, and set appointment notification.
 ;; (day-and-date)
 (display-time)
+;; Show the directory of a file or shell buffer in the mode-line ( http://www.emacswiki.org/emacs/ModeLineDirtrack ):
+(defun add-mode-line-dirtrack ()
+  (add-to-list 'mode-line-buffer-identification
+               '(:propertize (" " default-directory " ") face dired-directory)))
+(add-hook 'shell-mode-hook 'add-mode-line-dirtrack)
+(add-hook 'find-file-hook 'add-mode-line-dirtrack)
+;; End mode-line customization.
+
 (add-hook 'diary-hook 'appt-make-list)
 (diary 0)
 
@@ -621,9 +671,12 @@ autosave-dir "\\1") t)))
           (revert-buffer t t)))
     (calendar)))
 
-;; - - - General Useful Emacs Switches and Functions Section - - - - 
+;; - - - General Useful Emacs Switches and Functions Section - - - -
 
 (setq-default transient-mark-mode t)
+
+;; Revision Control
+(require 'magit) ;; Git integration: works with the built-in vc-git.
 
 ;; Global key maps:
 (global-set-key "\C-xU" 'browse-url)
@@ -632,11 +685,11 @@ autosave-dir "\\1") t)))
 (global-set-key "\e/" 'replace-regexp)
 (global-set-key "\C-xtl" 'goto-line)
 (global-set-key "\e[" 'enlarge-window)
-(global-set-key "\e]" 'shrink-window) 
+(global-set-key "\e]" 'shrink-window)
 (global-set-key "\e=" 'eval-current-buffer)
+(global-set-key "\eg" 'magit-status)
 
-
-;; Here's some code which is quite handy eg. after doing an update from revision control (i.e., cvs or svn), 
+;; Here's some code which is quite handy eg. after doing an update from revision control (i.e., cvs or svn),
 ;; which results in lots of files being updated. The following function reverts all Emacs file buffers.
 ;; ( From http://kavaro.com/mediawiki/index.php/Emacs-hacks ).
 (defun revert-all-buffers ()
@@ -652,52 +705,52 @@ autosave-dir "\\1") t)))
 
 
 ;; Launch a file with \C-&
-;; 
+;;
 ;; Usually, 'browse-url' works fine.  But for some reason, lately
-;; on WinXP (?sp2) I have needed this code. 
+;; on WinXP (?sp2) I have needed this code.
 ;;
 ;; On Unix systems, you'll have to use something like TrivialMode instead.
 ;;
 ;; Adapted from http://www.emacswiki.org/cgi-bin/wiki/MsShellExecute
 ;;
 ;; On W32 systems, the shell knows what to do with every file
-;; because you register the extensions with the explorer. 
-;; 
-;; Thus, you can use the following code. It defines a new function, 
-;; 'w32-browser, to just shell-execute a string. In Windows, this will 
+;; because you register the extensions with the explorer.
+;;
+;; Thus, you can use the following code. It defines a new function,
+;; 'w32-browser, to just shell-execute a string. In Windows, this will
 ;; allow you to edit .doc files, URLs, etc. Just call w32-browser with the filename.
 ;;
-;; Next, there's a keybinding which binds control-x& (or F3 if mapped to [f3]) 
-;; to a call to w32-browser, and 
-;; it builds a string from the current DiredMode entry. 
+;; Next, there's a keybinding which binds control-x& (or F3 if mapped to [f3])
+;; to a call to w32-browser, and
+;; it builds a string from the current DiredMode entry.
 ;; Now you can use cntrl-x& in dired to open any file.
-;; 
+;;
 
 ;;(defun w32-browser (doc)
 ;;  "Browse to a particular file/URL using default web browser"
 ;;  (w32-shell-execute 1 doc))
 
 ;;(eval-after-load "dired"
-;;  '(define-key dired-mode-map "\C-x&" (lambda () 
+;;  '(define-key dired-mode-map "\C-x&" (lambda ()
 ;;				     (interactive)
 ;;				     (w32-browser
-;;				      (dired-replace-in-string 
-;;				       "/" "\\" 
+;;				      (dired-replace-in-string
+;;				       "/" "\\"
 ;;				       (dired-get-filename))))))
 
 
 ;; These two key bindings are for up and down scrolling by a either single line at a time
-;; or by N lines at a time (default is scroll by one single line at a time).  This is 
+;; or by N lines at a time (default is scroll by one single line at a time).  This is
 ;; very useful when working with narrow horizontal windows.  ;~)
 ;; To enter the desired N, hold down \C and type the number and then hit z or q, all the
 ;; while holding down \C.
 ;; From the "Writing GNU Emacs Extensions" book, by Bob Glickstein.
-(defun scroll-n-lines-up (&optional n) 
+(defun scroll-n-lines-up (&optional n)
   "Scroll up N lines (1 line by default)."
   (interactive "P")
   (scroll-up (prefix-numeric-value n)))
 
-(defun scroll-n-lines-down (&optional n) 
+(defun scroll-n-lines-down (&optional n)
   "Scroll down N lines (1 line by default)."
   (interactive "P")
   (scroll-down (prefix-numeric-value n)))
@@ -714,7 +767,7 @@ autosave-dir "\\1") t)))
    ;; The following is the command for Emacs 20.1 and later:
 (show-paren-mode 1)
 
-;; Makes the C-x% keybinding show the matching parenthesis (smooth, curly, or square braket).	
+;; Makes the C-x% keybinding show the matching parenthesis (smooth, curly, or square braket).
 ;;    - http://www.emacswiki.org/emacs/ParenthesisMatching
 (global-set-key "\C-x%" 'goto-match-paren)
 (defun goto-match-paren (arg)
@@ -728,7 +781,7 @@ autosave-dir "\\1") t)))
         ((looking-back "[\[\(\{]" 1) (backward-char) (forward-sexp))
         (t nil)))
 
-;; The following functions enable on-the-fly switching between the bash shell and DOS:
+;; Windows only: The following functions enable on-the-fly switching between the bash shell and DOS:
 
 ;; (defun set-shell-bash()
 ;;   (interactive)
@@ -759,8 +812,8 @@ autosave-dir "\\1") t)))
 ;; Begin move-to-window block:
 ;; This code is from the O'Reilly "GNU Emacs Extensions" book.
 ;; The purpose of it is to make a reasonable way to move to the next OR previous window.
-;; Change from C-x o to C-x n, so that we have Next and Previous.  
-(global-set-key "\C-xn" 'other-window) 
+;; Change from C-x o to C-x n, so that we have Next and Previous.
+(global-set-key "\C-xn" 'other-window)
 
 ;; We must make our own function to go to the previous window (but it's simple):
 (defun other-window-backward ()
@@ -771,12 +824,11 @@ autosave-dir "\\1") t)))
 (global-set-key "\C-xp" 'other-window-backward)
 ;; End move to window block.
 
-;; This turns on the buffer select list in the minibuffer to make it easy to 
-;; edit any buffer in a given window or frame (C-r and C-s move backwards and forwards, respectively, 
+;; This turns on the buffer select list in the minibuffer to make it easy to
+;; edit any buffer in a given window or frame (C-r and C-s move backwards and forwards, respectively,
 ;; through the buffer select list).
 (require 'iswitchb)
 (iswitchb-default-keybindings)
-
 ;; old: (setq show-paren-mode t)
 ;; old: (setq show-paren-style 'parenthesis)
 
@@ -804,7 +856,7 @@ autosave-dir "\\1") t)))
 (set-face-foreground 'font-lock-string-face "Magenta")
 (set-face-foreground 'font-lock-variable-name-face "Coral")
 (set-face-foreground 'modeline "yellow")
-(set-face-background 'modeline "purple4") 
+(set-face-background 'modeline "purple4")
 (set-face-background 'region "MidnightBlue")
 (set-face-background 'secondary-selection "dodger blue")
 (set-face-foreground 'diary-face "Yellow")
@@ -813,7 +865,7 @@ autosave-dir "\\1") t)))
 (set-mouse-color "yellow")
 
 ;; The following settings pertain to features that you may not have installed on your GNU Emacs:
-  ;; Begin speedbar section (Values set via Emac's 'Customize' interface are found at the 
+  ;; Begin speedbar section (Values set via Emac's 'Customize' interface are found at the
   ;; bottom of the file, and hence if there is a 'conflict' they override these values).
 ;; (set-face-foreground 'speedbar-directory-face "Green")
 ;; (set-face-background 'speedbar-directory-face "Black")
@@ -823,13 +875,13 @@ autosave-dir "\\1") t)))
 ;; (set-face-foreground 'speedbar-file-face "Gold")
 ;; (set-face-foreground 'speedbar-tag-face "Orange")
 ;; Set the speedbar pop-up window properties: Note that if the speedbar height is too
-;; great, the windowing-system's title bar for the 
+;; great, the windowing-system's title bar for the
 ;; speedbar window (at least on Windows2000) will not show completely.
 (setq speedbar-frame-parameters '((width . 30)
 								  (height . 45)
 								  (foreground-color . "green")
 								  (background-color . "black")))
-  ;; End speedbar section. 
+  ;; End speedbar section.
 
   ;; You may not want the following line if you do not have paren-matching running:
 (set-face-foreground 'show-paren-match-face "Red")
@@ -838,13 +890,13 @@ autosave-dir "\\1") t)))
   ;; The following line is only if you have the JDE installed:
 ;;(set-face-foreground 'jde-java-font-lock-link-face "Gold")
 
-;; - - - - End General Emacs Switches and Functions Section - - - - 
+;; - - - - End General Emacs Switches and Functions Section - - - -
 
 
 
 ;;  ---------  This is SGML colorizing with the psgml package, loaded above.
 
-;;; Set up and enable syntax coloring. 
+;;; Set up and enable syntax coloring.
 ; Create faces  to assign markup categories.
 (make-face 'sgml-doctype-face)
 (make-face 'sgml-pi-face)
@@ -855,7 +907,7 @@ autosave-dir "\\1") t)))
 (make-face 'sgml-entity-face)
 (make-face 'sgml-attribute-face)
 
-; Assign attributes to faces. 
+; Assign attributes to faces.
 (set-face-foreground 'sgml-doctype-face "yellow")
 (set-face-foreground 'sgml-sgml-face "cyan1")
 (set-face-foreground 'sgml-pi-face "magenta")
@@ -892,41 +944,23 @@ autosave-dir "\\1") t)))
     (file-directory-p working-directory))
       (cd working-directory)))
 
-;; ---------- Begin Global Tabs Section
+;; ---------- Begin Global Whitespace Section
+
 ;; Make sure that tabs are being used (default behavior, but doesn't hurt in case something got changed):
 ;; (setq indent-tabs-mode t)
-	
 ;; Make sure that no tab characters are used:
 (setq indent-tabs-mode nil)
 
 ;; Set the variable default-tab-width.
 (setq default-tab-width 4)
-;; ---------- End Global Tabs Section
 
-;; ---------- BEGIN BUG WORKAROUNDS SECTION:
-;; Not needed any more (GNU Emacs 21.3.1) but preserved just in case: 
-;; 	 This prevents dired from displaying itself in warning-face when the 
-;; 	 default-tab-width is set to 2. 
-;; 	  (defadvice dired-readin (around ecm-dired-indent activate)
-;; 	    "Prevent indentation in dired from using tabs."
-;; 	    (let ((indent-tabs-mode nil))
-;; 	      ad-do-it))
+;; Remove trailing whitespace to avoid extraneous diff results:
+(add-hook 'write-file-hooks 'delete-trailing-whitespace)
 
-;; ----- SMTP section:
+;; ---------- End Global Whitespace Section
 
-(load-library "smtpmail")
-(setq smtpmail-smtp-server "smtp.earthlink.net")
-(setq send-mail-function 'smtpmail-send-it)
-(setq smtpmail-smtp-service "smtp")
-(setq smtpmail-local-domain "LocalDomain")
-(setq smtpmail-debug-info t) 
-;(setq smtpmail-debug-info 'nil) ;; if no debug info needed
-(setq smtpmail-code-conv-from nil)
-
-;; ---------- END BUG WORKAROUNDS SECTION:
-
-;; This enables saving the current desktop on shutdown.  The ESC-x desktop-save 
-;; command must be given once for this to work in perpetuity. 
+;; This enables saving the current desktop on shutdown.  The ESC-x desktop-save
+;; command must be given once for this to work in perpetuity.
 (desktop-save-mode 1)
 ;; This will save the desktop when Emacs is idle, giving some protection against
 ;; losing your desktop to a crash.
