@@ -3,7 +3,11 @@
 ;; Note that due to the workings of the Aquamacs "skin" for Emacs that is used here, the companion file '~/Library/Preferences/Aquamacs Emacs/customizations.el'
 ;; has been included alongside this file, in the same directory.
 ;;
-;; This file has been tested on the Aquamacs "skin" of GNU Emacs 23.3.50.1 (i386-apple-darwin9.8.0, NS apple-appkit-949.54) of 2011-10-25 on braeburn.aquamacs.org - Aquamacs Distribution 2.4, on Mac OS X Snow Leopard.
+;; This file has been tested on:
+;;     * The Aquamacs "skin" of GNU Emacs, available at: http://aquamacs.org/  .  M-x version yields:
+;;         GNU Emacs 23.3.50.1 (i386-apple-darwin9.8.0, NS apple-appkit-949.54) of 2011-10-25 on braeburn.aquamacs.org - Aquamacs Distribution 2.4, on Mac OS X Lion.
+;;     * A plain build of GNU Emacs on OS X, available at http://emacsformacosx.com/ .  M-x version yields:
+;;         GNU Emacs 24.3.1 (x86_64-apple-darwin, NS apple-appkit-1038.36) of 2013-03-12 on bob.porkrind.org
 ;; A similar variant has also been tested on Ubuntu 10.1, Centos 5 (kernel 2.6.18-194.el5) and on Windows XP, Service Pack 2.
 ;;
 ;; M-x version:
@@ -12,7 +16,7 @@
 ;; The GNU Emacs Homepage is located at:
 ;;             Http://www.gnu.org/directory/GNU/emacs.html
 ;;
-;; This Document Last Modified: 2012-09-17.
+;; This Document Last Modified: 2013-06-14.
 ;;
 ;; Portability: Comment out code for one platform and comment in the code for another.
 ;; For example, this file is currently set for Unix.
@@ -22,6 +26,7 @@
 ;; Aquamacs Users:
 ;;   Find this file on github at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/.emacs
 ;;   Find its companion file (see above for details), 'customizations.el', at: https://github.com/christopherbalz/.emacs-/blob/master/aquamacs/customizations.el
+;;   Note that for Aquamacs, custom extensions are often located under: '/Library/Application Support/Aquamacs Emacs/'
 ;;
 ;; General Notes:  It is often said that a new Emacs user should stay away from old, crusty
 ;;                 '.emacs' files from others.  However, the only way that I ever was able
@@ -106,6 +111,9 @@
 ;; End: Set character/file encoding - - - -
 
 
+;; desktop-menu mode - useful for keeping two instances of Emacs on their own desktop.
+(autoload 'desktop-menu "desktop-menu" "desktop-menu mode, useful if you have more than one instance of Emacs under your username." t)
+
 ;; This is key for handling shell processes that output utf-8 characters.
 ;; Some will tell you they failed with a utf-8 char, in which case it's helpful to be able to see it.
 (defun u-shell ()
@@ -131,6 +139,7 @@
 (add-to-list 'load-path (expand-file-name "/opt/local/share/emacs/site-lisp/")) ;; Note that these show up before Aquamacs paths.
 (add-to-list 'load-path (expand-file-name "/opt/local/share/emacs/site-lisp/w3m"))
 (add-to-list 'load-path (expand-file-name "/opt/local/share/emacs/site-lisp/magit"))
+(add-to-list 'load-path (expand-file-name "/Library/Application Support/Aquamacs Emacs/js2-mode"))
 
 ;; Personal emacs/site:
 (setq load-path (cons (expand-file-name "~/emacs/site/") load-path)) ;; Prepends to override analogous system libs.
@@ -308,10 +317,12 @@
 (defvar backup-dir (concat "/tmp/emacs_backups/" (user-login-name) "/"))
 (setq backup-directory-alist (list (cons "." backup-dir)))
 
+(autoload 'php-mode "php-mode" nil t);
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 
 ;; ----- Begin JavaScript Section
 
-(autoload 'js2-mode "js2" nil t) ;; http://code.google.com/p/js2-mode/
+(autoload 'js2-mode "js2-mode" nil t) ;; http://code.google.com/p/js2-mode/
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)) ;; '.json' files do not work well at the time of this writing with 'js2' mode (JavaScript-IDE).
 (autoload 'json-mode "json-mode" nil t) ;; https://github.com/joshwnj/json-mode
 (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
@@ -342,10 +353,7 @@
 ;; ----- Begin Handlebars/Mustache Template Editing Section: From https://github.com/mustache/emacs/blob/master/mustache-mode.el  @to-do: Come up with a way in Emacs to match '.html' that's not '.mu.html'.
 (require 'mustache-mode)
 (setq auto-mode-alist
-      (cons '("\\.mu\\.\\(html\\)\\'" . mustache-mode)
-	      auto-mode-alist))
-(setq auto-mode-alist
-      (cons '("\\.hb\\.\\(html\\)\\'" . mustache-mode)
+      (cons '("\\.\\(dust\\|hbs\\)" . mustache-mode)
 	      auto-mode-alist))
 ;; ----- End Handlebars/Mustache Template Editing Section
 
@@ -411,24 +419,7 @@
 ;; 		     ;; (cons "\\.other-extensions$"     'promela-mode)
 ;;              )
 ;;        auto-mode-alist))
-
 ;; ;; --------  End Promela Section
-
-;; -------- Begin Firefox Section
-
-;;     (defun browse-url-firefox-new-tab (url &optional new-window)
-;;       "Open URL in a new tab in Firefox."
-;;       (interactive (browse-url-interactive-arg "URL: "))
-;;       (let ((cmd (shell-command-to-string
-;;     		  (concat "~/utils/firefox/mozilla-xremote-client -a any 'openURL("
-;;     			  url ",new-tab)'"))))
-;;     	(unless (string= "" cmd)
-;;     	  (message "Starting Firefox...")
-;;     	  (start-process (concat "firefox " url) nil "~/utils/firefox/firefox" url)
-;;     	  (message "Starting Firefox...done"))))
-;;
-;; -------- End Firefox Section
-
 
 ;; ;; --------- Begin w3m Section (HTML browser)
 
@@ -436,7 +427,7 @@
 ;; ;;; w3m browser mode:
 ;; ;;;======================================================y================
 ;; See the info near the top of the file about w3m.
-;;  (require 'w3m-load)
+;; (require 'w3m-load)
 ;; ;;; This integrates the external program w3m with emacs.
 ;; ;; (setq w3m-command (concat "c:/Progra~1/emacs/site/w3m-0.5.1/w3m.exe" ""))
 ;; ;; Commented out while w3m is broken (setq w3m-browse-url (concat "c:/Progra~1/emacs/site/w3m-0.5.1/w3m.exe" ""))
@@ -672,6 +663,11 @@
     (calendar)))
 
 ;; - - - General Useful Emacs Switches and Functions Section - - - -
+(defun update-aquamacs-visit-website ()
+  (interactive)
+  "Visits the update page for Aquamacs Emacs."
+    (browse-url "http://aquamacs.org/download.shtml")
+)
 
 (setq-default transient-mark-mode t)
 
@@ -827,10 +823,11 @@
 ;; This turns on the buffer select list in the minibuffer to make it easy to
 ;; edit any buffer in a given window or frame (C-r and C-s move backwards and forwards, respectively,
 ;; through the buffer select list).
-(require 'iswitchb)
-(iswitchb-default-keybindings)
-;; old: (setq show-paren-mode t)
-;; old: (setq show-paren-style 'parenthesis)
+;;   - - - - Begin for old Emacs ( < Emacs 24.6 )
+;; (require 'iswitchb)
+;; (iswitchb-default-keybindings) ;; not available on emacs 24.6:
+;;   - - - - End for old Emacs ( < Emacs 24.6 )
+(iswitchb-mode 1)
 
 ;; Set a high recursion limit for parsing the long java files:
 (setq max-specpdl-size 1000)
@@ -848,15 +845,18 @@
 (set-foreground-color "Green")
 (set-background-color "Gray10")
 ;; Aquamacs: To change the initial frame, you can modify initial-frame-alist
-(setq initial-frame-alist '((background-color . "Gray10") (left . 50)  ))                          ;; Aquamacs Only.
+(setq initial-frame-alist '((background-color . "Gray10") (left . 50)  ))                          ;; Required for Aquamacs only, but works on straight OS X Emacs builds too.
 ;; Preventing Aquamacs from changing those properties when opening additional windows
-(setq default-frame-alist '((background-color . "Gray10") (left . 0) (width . 141) (height . 44))) ;; Aquamacs Only.
+(setq default-frame-alist '((background-color . "Gray10") (left . 0) (width . 141) (height . 44))) ;; Required for Aquamacs only, but works on straight OS X Emacs builds too.
 (set-face-foreground 'font-lock-function-name-face "Turquoise")
 (set-face-foreground 'font-lock-keyword-face "Yellow")
 (set-face-foreground 'font-lock-string-face "Magenta")
 (set-face-foreground 'font-lock-variable-name-face "Coral")
-(set-face-foreground 'modeline "yellow")
-(set-face-background 'modeline "purple4")
+(set-face-attribute 'mode-line nil
+   :foreground "yellow"
+   :background "purple4")
+;;(Set-face-foreground 'modeline "yellow")   ;; For < Emacs 24.6; Doesn't work on Emacs 24.6
+;;(set-face-background 'modeline "purple4")  ;; For < Emacs 24.6; Doesn't work on Emacs 24.6
 (set-face-background 'region "MidnightBlue")
 (set-face-background 'secondary-selection "dodger blue")
 (set-face-foreground 'diary-face "Yellow")
@@ -978,8 +978,8 @@
   ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["black" "red" "green" "yellow" "pink" "magenta" "cyan" "white"])
  '(appt-message-warning-time 60 t)
- '(browse-url-browser-function (quote browse-url-firefox-new-tab))
- '(browse-url-generic-program "~/utils/firefox/firefox")
+ ;; '(browse-url-browser-function (quote browse-url-firefox-new-tab)) ;; Not needed for Aquamacs
+ ;;'(browse-url-generic-program "~/utils/firefox/firefox")
  '(calculator-number-digits 10)
  '(case-fold-search t)
  '(column-number-mode t)
