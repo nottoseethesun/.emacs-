@@ -1,5 +1,7 @@
 This repo is for useful '.emacs' files for GNU Emacs.  
 
-Aquamacs is great and can be found at: http://aquamacs.org/
+Aquamacs is great and can be found at: http://aquamacs.org/  
+
+Note that only Aquamacs needs the file, 'customizations.el' (a sample one is located under 'aquamacs', here).
 
 The 'aquamacs' .emacs file works as well on plain Mac OS X GNU Emacs, as found at: http://emacsformacosx.com/ 
