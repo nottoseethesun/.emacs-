@@ -1,5 +1,10 @@
 This repo is for useful '.emacs' files for GNU Emacs.  
 
+Here is a link to all the Emacs packages referenced by the Mac OS X version of the '.emacs' file (found under 'aquamacs', above): https://www.dropbox.com/s/0dewvywod20lxtq/opt.local.share.emacs.tar.gz
+
+Mac OS X
+--------------
+
 Aquamacs is great and can be found at: http://aquamacs.org/  
 
 Note that only Aquamacs needs the file, 'customizations.el' (a sample one is located under 'aquamacs', here).
