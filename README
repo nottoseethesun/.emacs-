@@ -1,1 +1,5 @@
-This repo is for useful '.emacs' files for GNU Emacs.  Grab a fork and feast!
+This repo is for useful '.emacs' files for GNU Emacs.  
+
+Aquamacs is great and can be found at: http://aquamacs.org/
+
+The 'aquamacs' .emacs file works as well on plain Mac OS X GNU Emacs, as found at: http://emacsformacosx.com/ 
