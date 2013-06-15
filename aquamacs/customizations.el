@@ -1,6 +1,8 @@
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Only Aquamacs needs this.
+  ;; This file is found at: ~/Library/Preferences/Aquamacs Emacs/customizations.el
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["black" "red" "green" "yellow" "pink" "magenta" "cyan" "white"])
