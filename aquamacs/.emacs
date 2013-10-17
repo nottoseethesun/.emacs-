@@ -11,7 +11,7 @@
 ;; A similar variant has also been tested on Ubuntu 10.1, Centos 5 (kernel 2.6.18-194.el5) and on Windows XP, Service Pack 2.
 ;;
 ;; M-x version:
-;;        GNU Emacs 23.3.50.1 (i386-apple-darwin9.8.0, NS apple-appkit-949.54) of 2011-10-25 on braeburn.aquamacs.org - Aquamacs Distribution 2.4
+;;        GNU Emacs 23.4.1 (x86_64-apple-darwin12.3.0, NS apple-appkit-1187.37) of 2013-06-13 on acs-trailblazer.ist.psu.edu - Aquamacs Distribution 2.5
 ;;
 ;; The GNU Emacs Homepage is located at:
 ;;             Http://www.gnu.org/directory/GNU/emacs.html
@@ -67,9 +67,39 @@
 
 ;; ------------  Commense lisping:
 
+;;  - - - Begin CEDET
+;; Load a more up-to-date CEDET than the one that ships with emacs.
+;; See cedet/common/cedet.info for configuration details.
+;; IMPORTANT: Tou must place this *before* any CEDET component (including
+;; EIEIO) gets activated by another package (Gnus, auth-source, ...).
+;; (load-file "/home/user/cedet/cedet-devel-load.el")
+
+;; Add further minor-modes to be enabled by semantic-mode.
+;; See doc-string of `semantic-default-submodes' for other things
+;; you can use here.
+;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+;; (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
+
+;; Enable Semantic
+;; (semantic-mode 1)
+
+;; Enable EDE (Project Management) features
+;;(global-ede-mode 1)
+;;  - - - End CEDET
+
+;; - - - Begin Auto-Complete (non-CEDET autocompletion; knows about JavaScript).  Manual: http://cx4a.org/software/auto-complete/manual.html
+(add-to-list 'load-path "/opt/local/share/emacs/site-lisp/auto-complete/")
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(ac-config-default)
+;; - - - End Auto-Complete
+
+(global-set-key [(control tab)] 'dabbrev-expand) ;; Standard Emacs identifier completion (autocomplete/autocompletion).
+
 ;; Begin: Turn off unnecessary gui elements:
 (if (not(eq (boundp 'tabbar) nil))
-    (tabbar-mode -1)          ;; hide the tab bar that just recently became turned on by default in some flavors of Emac, around Emacs v23..
+    (tabbar-mode -1)          ;; hide the tab bar that just recently became turned on by default in some flavors of Emacs, around Emacs v23.
 )
 ;; Hide the tool-bar, in case it appears.  Note that on Aquamacs, per http://www.emacswiki.org/emacs/AquamacsFAQ , it's a setting in the Aquamacs 'customizations.el' (mentioned above).
 ;;    E.g.:  “Options → Appearance → Adopt Face and Frame Parameters as Frame Default”. Then choose “Options → Save Options”.
@@ -143,6 +173,7 @@
 
 ;; Personal emacs/site:
 (setq load-path (cons (expand-file-name "~/emacs/site/") load-path)) ;; Prepends to override analogous system libs.
+(add-to-list 'load-path "/opt/local/share/emacs/site-lisp/html5/html5-el-master")
 ;; (add-to-list 'load-path (expand-file-name "~/emacs/site/")) ;; Append to let analogous system libs take precedence.
 ;; So that Emacs can find the home directory files (desktop, etc.):
 (add-to-list 'load-path (expand-file-name "~/"))
@@ -204,10 +235,6 @@
 ;;(add-to-list 'load-path (expand-file-name "~/emacs/site/cedet/common"))
 ;; Emacs Code Browser is an optional-element to the JDEE Suite:
 ;;(add-to-list 'load-path "~/emacs/site/ecb")
-
-;; Load CEDET.
-;; See cedet/common/cedet.info for configuration details.
-;;(load-file "~/emacs/site/cedet/common/cedet.el")
 
 ;; Enable EDE (Project Management) features
 ;;(global-ede-mode 1)
@@ -314,15 +341,35 @@
 ;; Put backup files (ie foo~) in one place too. (The backup-directory-alist
 ;; list contains regexp=>directory mappings; filenames matching a regexp are
 ;; backed up in the corresponding directory. Emacs will mkdir it if necessary.)
-(defvar backup-dir (concat "/tmp/emacs_backups/" (user-login-name) "/"))
+(defvar backup-dir (concat "~/tmp/emacs_backups/" (user-login-name) "/"))
 (setq backup-directory-alist (list (cons "." backup-dir)))
 
-(autoload 'php-mode "php-mode" nil t);
+(autoload 'php-mode "php-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 
 ;; ----- Begin JavaScript Section
 
 (autoload 'js2-mode "js2-mode" nil t) ;; http://code.google.com/p/js2-mode/
+
+;; - - - Set js2-mode to know about globals: http://www.emacswiki.org/emacs/Js2Mode
+;; After js2 has parsed a js file, we look for jslint globals decl comment ("/* global Fred, _, Harry */") and
+;; add any symbols to a buffer-local var of acceptable global vars
+;; Note that we also support the "symbol: true" way of specifying names via a hack (remove any ":true"
+;; to make it look like a plain decl, and any ':false' are left behind so they'll effectively be ignored as
+;; you can;t have a symbol called "someName:false"
+(add-hook 'js2-post-parse-callbacks
+          (lambda ()
+            (when (> (buffer-size) 0)
+              (let ((btext (replace-regexp-in-string
+                            ": *true" " "
+                            (replace-regexp-in-string "[\n\t ]+" " " (buffer-substring-no-properties 1 (buffer-size)) t t))))
+                (mapc (apply-partially 'add-to-list 'js2-additional-externs)
+                      (split-string
+                       (if (string-match "/\\* *global *\\(.*?\\) *\\*/" btext) (match-string-no-properties 1 btext) "")
+                       " *, *" t))
+                ))))
+
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)) ;; '.json' files do not work well at the time of this writing with 'js2' mode (JavaScript-IDE).
 (autoload 'json-mode "json-mode" nil t) ;; https://github.com/joshwnj/json-mode
 (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
@@ -331,8 +378,6 @@
 ;; See https://sekhmet.acceleration.net/ADW/JsShellServer
 ;;(add-hook 'javascript-mode-hook 'js-mode)
 ;;(autoload 'js-mode "js-mode" nil t)
-
-(global-set-key [(control tab)] 'dabbrev-expand) ;; Identifier completion (autocomplete/autocompletion)!
 
 ;; This is the container for my custom js editing mode
 (defun my-js-indent-setup ()
@@ -358,15 +403,40 @@
 ;; ----- End Handlebars/Mustache Template Editing Section
 
 ;; ----- Begin XML--XSL--HTML Editing Section
+
+;;   - - - From http://web-mode.org/
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+;; Necessary to override the application of html-mode:
+(add-to-list 'magic-mode-alist '("<!DOCTYPE html>" . web-mode) )
+(add-to-list 'magic-mode-alist '("<!doctype html>" . web-mode) )
+(add-to-list 'magic-mode-alist '("<html>" . web-mode) )
+
+
 (setq auto-mode-alist
       (cons '("\\.\\(fo\\|xml\\|xsl\\|xsd\\|rng\\|xhtml\\)\\'" . nxml-mode)
 	      auto-mode-alist))
+
+
+;; The following first-line matches are used to load nxml-mode over html-helper mode, since we use the non-xml html5 package (which does also do xhtml5).
 
  (defun my-nxml-indent-setup ()
    (setq indent-tabs-mode nil) )
  ;; Add the above hook to the nxml-mode.
  (add-hook 'nxml-mode-hook 'my-nxml-indent-setup)
 
+;;   - - - Begin html5 section (also added to load path in custom directory, above).
+(eval-after-load "rng-loc"
+  '(add-to-list 'rng-schema-locating-files "/opt/local/share/emacs/site-lisp/html5/html5-el-master/schemas.xml"))
+
+(require 'whattf-dt)
+;;   - - - End html5 section (also added to load path in custom directory, above).
 ;;
 ;; ----- End XML--XSL--HTML Editing Section
 
@@ -420,6 +490,13 @@
 ;;              )
 ;;        auto-mode-alist))
 ;; ;; --------  End Promela Section
+
+;; From http://jblevins.org/projects/markdown-mode/ :
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; ;; --------- Begin w3m Section (HTML browser)
 
@@ -611,12 +688,17 @@
 ;;      (cons '("\\.css$" . css-mode) auto-mode-alist))
 ;; ----- End CSS mode.
 
-;; ----- Begin Sass Mode
-(require 'sass-mode)
+;; ----- Begin Sass Css Mode
+;; (require 'sass-mode)
 ;; ----- End Sass Mode
 ;; ----- Begin Sass scss flavor Mode
-(require 'scss-mode)
+;; (require 'scss-mode)
 ;; ----- End Sass scss flavor Mode
+
+;; ----- Begin Less Css Mode
+(require 'flymake-less)
+(add-hook 'less-css-mode-hook 'flymake-less-load)
+;; ----- End Less Css Mode
 
 ;; Make sure that .emacs file is edited in lisp mode:
 (setq auto-mode-alist (cons '("\.emacs" . lisp-mode)        auto-mode-alist))
@@ -675,6 +757,7 @@
 (require 'magit) ;; Git integration: works with the built-in vc-git.
 
 ;; Global key maps:
+(global-set-key "\C-c\C-v" 'browse-url-of-buffer)
 (global-set-key "\C-xU" 'browse-url)
 (global-set-key "\C-xP" 'browse-url-at-point)
 (global-set-key "\e`" 'search-forward-regexp)
@@ -953,6 +1036,9 @@
 
 ;; Set the variable default-tab-width.
 (setq default-tab-width 4)
+
+;; auto-fill-mode seems to have been turned on by default now in far more places than one would want.
+(auto-fill-mode -1)
 
 ;; Remove trailing whitespace to avoid extraneous diff results:
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
