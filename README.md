@@ -1,6 +1,14 @@
+Overview
+========
 This repo is for useful '.emacs' files for GNU Emacs.
 
-Installation instructions can be found in the `.emacs' files.  The `.emacs' file currently works on both Mac OS X and Ubuntu 12.04 LTS.
+
+Installation
+============
+
+Installation instructions can be found in the `.emacs` files.  The `.emacs` file currently works on both Mac OS X and Ubuntu 12.04 LTS. See the section below about Mac OS X for tips on installation there.
+
+The `.emacs_centos-5` file is rather out of date at this point, but should still work.
 
 Mac OS X
 ========
