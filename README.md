@@ -11,7 +11,7 @@ Installation instructions can be found in the `.emacs` files.  The `.emacs` file
 
 The `.emacs_centos-5` file is rather out of date at this point, but should still work.
 
-The `.emacs` file can be adopted wholesale.  But as a rule of thumb, only add code into your `.emacs` file that you fully understand.  So often, the adoption model is to try out select segments of other `.emacs` files one at a time.
+The `.emacs` file can be adopted wholesale.  But as a rule of thumb, only add code into your `.emacs` file that you fully understand.  So, often, the adoption model is to try out select segments of other `.emacs` files one at a time.
 
 Usage
 =====
