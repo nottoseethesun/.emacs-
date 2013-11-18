@@ -17,7 +17,7 @@ For Mac, the vanilla build is recommended since it supports a very current versi
 
 Aquamacs
 --------
-  * Aquamacs is great, but at the time of this writing, outdated since it is not built with Emacs 24.6
+  * Aquamacs is great, but at the time of this writing, outdated since it is built with Emacs 23.
   * It can be found at: [http://aquamacs.org/](http://aquamacs.org/)
   * Here is a link to all the Emacs packages referenced by the Aquamacs Mac OS X version of the '.emacs' file (found under 'aquamacs', above): [https://www.dropbox.com/s/0dewvywod20lxtq/opt.local.share.emacs.tar.gz](https://www.dropbox.com/s/0dewvywod20lxtq/opt.local.share.emacs.tar.gz)
   * Note that only Aquamacs needs the file, 'customizations.el' (a sample one is located under 'aquamacs', here).
