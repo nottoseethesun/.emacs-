@@ -33,8 +33,8 @@
 ;;
 ;; Hacks: Any hacks or workarounds are marked with '@workaround' (no quotes).  You can find them by searching on that character string.
 ;;
-;; Known issues: Some package used here is, at the time of this writing, causing the start-up warning message, "package assoc is obsolete!".
-;;               This is harmless, and will likely be fixed soon, as Emacs 24 obsoleted that package.  If not, a process of elimination can find the culprit package.
+;; Known issues: Ubuntu: Some package used here is, at the time of this writing, causing the start-up warning message, "package assoc is obsolete!".
+;;                       This is harmless, and will likely be fixed soon, as Emacs 24 obsoleted that package.  If not, a process of elimination can find the culprit package.
 ;;
 ;; Aquamacs Users:
 ;;   This file will not work with Aquamacs, as this file requires solid support for the Emacs packaging systems (such as ELPA and Marmalade).
