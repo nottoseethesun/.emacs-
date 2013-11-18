@@ -89,25 +89,6 @@
 ;; Emacs Debug Start-Up Mode: Provide a useful error trace if loading this .emacs fails.  Turn this on if there are error messages in the *Messages* buffer:
 (setq debug-on-error t)
 
-;; - - - - For non-Aquamacs ports to Mac OS X, must import the shell env, and also, do the @workaround just below:
-;; https://github.com/purcell/exec-path-from-shell
-(when (memq window-system '(mac ns)) ;; If running on Aquamacs, this may need to be altered or removed.
-  ;; - - - Begin @workaround for issue described at: http://lists.gnu.org/archive/html/bug-gnu-emacs/2012-07/msg00911.html
-  (setq ls-lisp-use-insert-directory-program t)
-  (setq insert-directory-program "gls")
-   ;; - - - End workaround.
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "CLOJURESCRIPT_HOME")
-  (exec-path-from-shell-copy-env "HOME_BIN")
-  (exec-path-from-shell-copy-env "JAVA_HOME")
-  (exec-path-from-shell-copy-env "ANT_OPTS")
-  (exec-path-from-shell-copy-env "GREP_OPTIONS")
-  (exec-path-from-shell-copy-env "EDITOR")
-  (exec-path-from-shell-copy-env "PS1")
-  (exec-path-from-shell-copy-env "CLICOLORS")
-  (exec-path-from-shell-copy-env "LSCOLORS")
-)
-
 ;; Begin: Turn off unnecessary gui elements: - - - -
 ;; Note that on Aquamacs, per http://www.emacswiki.org/emacs/AquamacsFAQ , it's a setting in the Aquamacs 'customizations.el' (mentioned above).
 ;;    E.g.:  “Options → Appearance → Adopt Face and Frame Parameters as Frame Default”. Then choose “Options → Save Options”.
@@ -282,6 +263,25 @@
     (package-install p)))
 ;; - - - End: Package Management System: Marmalade - - - -
 
+
+;; - - - - For non-Aquamacs ports to Mac OS X, must import the shell env, and also, do the @workaround just below:
+;; https://github.com/purcell/exec-path-from-shell
+(when (memq window-system '(mac ns)) ;; If running on Aquamacs, this may need to be altered or removed.
+  ;; - - - Begin @workaround for issue described at: http://lists.gnu.org/archive/html/bug-gnu-emacs/2012-07/msg00911.html
+  (setq ls-lisp-use-insert-directory-program t)
+  (setq insert-directory-program "gls")
+   ;; - - - End workaround.
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "CLOJURESCRIPT_HOME")
+  (exec-path-from-shell-copy-env "HOME_BIN")
+  (exec-path-from-shell-copy-env "JAVA_HOME")
+  (exec-path-from-shell-copy-env "ANT_OPTS")
+  (exec-path-from-shell-copy-env "GREP_OPTIONS")
+  (exec-path-from-shell-copy-env "EDITOR")
+  (exec-path-from-shell-copy-env "PS1")
+  (exec-path-from-shell-copy-env "CLICOLORS")
+  (exec-path-from-shell-copy-env "LSCOLORS")
+)
 
 ;; - - - Begin Auto-Complete (as distinguished from `autocomplete`)
 ;;     This is non-CEDET autocompletion and it knows about JavaScript.
