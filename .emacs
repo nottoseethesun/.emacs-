@@ -270,24 +270,35 @@
 ;; - - - End: Package Management System: Marmalade - - - -
 
 
-;; - - - - For non-Aquamacs ports to Mac OS X, must import the shell env, and also, do the @workaround just below:
-;; https://github.com/purcell/exec-path-from-shell
+;; - - Begin: Get the variables needed from the shell:
+;; - For non-Aquamacs ports to Mac OS X, must import the shell env, and also, do the @workaround just below:
 (when (memq window-system '(mac ns)) ;; If running on Aquamacs, this may need to be altered or removed.
   ;; - - - Begin @workaround for issue described at: http://lists.gnu.org/archive/html/bug-gnu-emacs/2012-07/msg00911.html
   (setq ls-lisp-use-insert-directory-program t)
   (setq insert-directory-program "gls")
    ;; - - - End workaround.
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "CLOJURESCRIPT_HOME")
-  (exec-path-from-shell-copy-env "HOME_BIN")
-  (exec-path-from-shell-copy-env "JAVA_HOME")
-  (exec-path-from-shell-copy-env "ANT_OPTS")
-  (exec-path-from-shell-copy-env "GREP_OPTIONS")
-  (exec-path-from-shell-copy-env "EDITOR")
-  (exec-path-from-shell-copy-env "PS1")
-  (exec-path-from-shell-copy-env "CLICOLORS")
-  (exec-path-from-shell-copy-env "LSCOLORS")
 )
+;; https://github.com/purcell/exec-path-from-shell
+(cond
+ ((not (string= system-type "windows-nt"))
+ (progn
+   (message "Getting shell environment variables.")
+   ;; (exec-path-from-shell-initialize) ;; Gets $PATH , $MANPATH , and exec-path, but only on Mac OS X.  So we do them explicitly here:
+   (exec-path-from-shell-copy-env "PATH")
+   (exec-path-from-shell-copy-env "MANPATH")
+   (exec-path-from-shell-copy-env "exec-path")
+   (exec-path-from-shell-copy-env "CLOJURESCRIPT_HOME")
+   (exec-path-from-shell-copy-env "HOME_BIN")
+   (exec-path-from-shell-copy-env "JAVA_HOME")
+   (exec-path-from-shell-copy-env "ANT_OPTS")
+   (exec-path-from-shell-copy-env "GREP_OPTIONS")
+   (exec-path-from-shell-copy-env "EDITOR")
+   (exec-path-from-shell-copy-env "PS1")
+   (exec-path-from-shell-copy-env "CLICOLORS")
+   (exec-path-from-shell-copy-env "LSCOLORS")
+   ))
+ )
+;; - - End: Get the variables needed from the shell:
 
 ;; - - - Begin Auto-Complete (as distinguished from `autocomplete`)
 ;;     This is non-CEDET autocompletion and it knows about JavaScript.
