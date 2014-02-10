@@ -33,8 +33,8 @@
 ;;
 ;; Hacks: Any hacks or workarounds are marked with '@workaround' (no quotes).  You can find them by searching on that character string.
 ;;
-;; Known issues: Ubuntu: Some package used here is, at the time of this writing, causing the start-up warning message, "package assoc is obsolete!".
-;;                       This is harmless, and will likely be fixed soon, as Emacs 24 obsoleted that package.  If not, a process of elimination can find the culprit package.
+;; Known issues: Some package used here is, at the time of this writing, causing the start-up warning message, "package assoc is obsolete!".
+;;               This is harmless, and will likely be fixed soon, as Emacs 24 obsoleted that package.  If not, a process of elimination can find the culprit package.
 ;;
 ;; Aquamacs Users:
 ;;   This file will not work with Aquamacs, as this file requires solid support for the Emacs packaging systems (such as ELPA and Marmalade).
@@ -95,6 +95,9 @@
 (if (not(eq (boundp 'tabbar) nil))
     (tabbar-mode -1)          ;; hide the tab bar that just recently became turned on by default in some flavors of Emacs, around Emacs v23.
 )
+;; The drag area of vertical windows is very limited with scrollbars, the scrollbars take up a fair bit of real estate,
+;; and key nav is better in Emacs than scrolling anyway.
+(scroll-bar-mode -1)
 ;; End: Turn off unnecessary gui elements. - - - -
 
 ;; List Emacs command-line arguments:
@@ -201,6 +204,8 @@
       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
               '("elpa" . "http://tromey.com/elpa/"))
+;; (add-to-list 'package-archives
+;;             '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
 (defvar my-packages '(
@@ -244,6 +249,7 @@
               clojurescript-mode
               clojure-project-mode
               cider
+              troncle
               nrepl
               ac-nrepl
               ;; - - - Config File Types
@@ -434,6 +440,10 @@
 (autoload 'php-mode "php-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
+;; - - - Begin Clojure:
+(load-library "troncle")
+;; - - - End Clojure
 
 ;; - - - Begin ClojureScript
 (defun cljs-repl ()
@@ -851,10 +861,11 @@
 
 ;; ---------- Begin Global Whitespace Section
 
-;; Make sure that tabs are being used (default behavior, but doesn't hurt in case something got changed):
-;; (setq indent-tabs-mode t)
-;; Make sure that no tab characters are used:
-(setq indent-tabs-mode nil)
+;; indent-tabs-mode is set in the custom-set-varibles expression, below:
+;; Tab chars:
+;;  (setq indent-tabs-mode t) ;; Why anyone would want to use tabs over spaces is beyond me.
+;; No tab characters are used:
+;;  (setq indent-tabs-mode nil)
 
 ;; Set the variable default-tab-width.
 (setq default-tab-width 4)
@@ -902,6 +913,7 @@
  '(midnight-hook (quote (update-my-calendar)))
  '(midnight-mode t nil (midnight))
  '(printer-name "USB001")
+ '(safe-local-variable-values (quote ((css-indent-level . 4))))
  '(show-paren-mode t nil (paren))
  '(speedbar-show-unknown-files t)
  '(speedbar-use-images t)
