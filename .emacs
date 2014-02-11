@@ -532,8 +532,8 @@
 
 ;; (defun my-nxml-indent-setup ()
 ;;   (setq indent-tabs-mode nil) )
- ;; Add the above hook to the nxml-mode.
- (add-hook 'nxml-mode-hook 'my-nxml-indent-setup)
+;; Add the above hook to the nxml-mode.
+;; (add-hook 'nxml-mode-hook 'my-nxml-indent-setup)
 
 ;;   - - - Begin html5 section (also added to load path in custom directory, above).
 (eval-after-load "rng-loc"
