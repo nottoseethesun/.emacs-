@@ -4,20 +4,18 @@
 ;;
 ;; This file has been tested on:
 ;;
-;;     * GNU Emacs on Ubuntu 12.04 LTS (using Emacs v24 from the cassou/emacs launchpad-hosted ppa.  See:
-;;            http://ubuntuhandbook.org/index.php/2013/09/install-upgrade-to-emacs-24-3-in-ubuntu-13-04-12-10-12-04/
-;;            M-x version yields:
-;;                GNU Emacs 24.3.1 (x86_64-pc-linux-gnu, GTK+ Version 3.4.2) of 2013-10-03 on lakoocha, modified by Debian
 ;;     * A plain build of GNU Emacs on OS X, available at http://emacsformacosx.com/ .  M-x version yields:
-;;         GNU Emacs 24.3.1 (x86_64-apple-darwin, NS apple-appkit-1038.36) of 2013-03-12 on bob.porkrind.org
+;;         GNU Emacs 24.5.1 (x86_64-apple-darwin13.4.0, NS apple-appkit-1265.21) of 2015-04-10 on builder10-9.porkrind.org
+;;
+;; It should work with relatively little modification on Ubuntu, CentOS, and Windows.
 ;;
 ;; First-time users:
 ;;     * This file uses '/opt/local/share/emacs/site-lisp', which doesn't exist on some systems.
 ;;       If yours doesn't have that file path, you can change that file path or create it.
 ;;     * Before installing this dot-emacs file (or after, if you don't mind getting an error message), you will need to run 'M-x package-list' from your Emacs.
 ;;     * This file requires two Emacs optional add-on files that aren't supported by Emacs packaging services used here.
-;;       They are html5-el and desktop-menu .  If you want them, you will need to manually install them.
-;;       If not, you will need to comment out or delete the references to them from this file.
+;;       The only one is html5-el.  If you want that, you will need to manually install it.
+;;       If not, you will need to comment out or delete the references to it from this file.
 ;;
 ;; Windows users: This file contains commented-out segments that would be of use for running this file on Windows.
 ;;
@@ -25,16 +23,14 @@
 ;;
 ;;             http://www.gnu.org/directory/GNU/emacs.html
 ;;
-;; This Document Last Modified: 2013-11-17.
+;; This Document Last Modified: 2015-08-01.
 ;;
-;; Portability: Comment out code for one platform and comment in the code for another.  For example, this file is currently set for Unix.
+;; Portability: Comment out code for one platform and comment in the code for another.  For example, this file is currently set for Mac OS X Unix.
 ;;
 ;; @author: Christopher M. Balz.
 ;;
 ;; Hacks: Any hacks or workarounds are marked with '@workaround' (no quotes).  You can find them by searching on that character string.
 ;;
-;; Known issues: Some package used here is, at the time of this writing, causing the start-up warning message, "package assoc is obsolete!".
-;;               This is harmless, and will likely be fixed soon, as Emacs 24 obsoleted that package.  If not, a process of elimination can find the culprit package.
 ;;
 ;; Aquamacs Users:
 ;;   This file will not work with Aquamacs, as this file requires solid support for the Emacs packaging systems (such as ELPA and Marmalade).
@@ -59,8 +55,6 @@
 ;;                 them to use right away in their own '.emacs' files.  To this end, I have
 ;;                 attempted to effectively segment the various independent components of this
 ;;                 '.emacs' file and have documented what I have done as clearly as possible.
-;;                 It's very exciting how Emacs modes related to software engineering for the
-;;                 web are maturing.
 ;;
 
 ;; ------------   Invocation of Gnu Emacs on Windows:
@@ -97,7 +91,8 @@
 )
 ;; The drag area of vertical windows is very limited with scrollbars, the scrollbars take up a fair bit of real estate,
 ;; and key nav is better in Emacs than scrolling anyway.
-(scroll-bar-mode -1)
+(when (fboundp 'scroll-bar-mode)
+(scroll-bar-mode -1))
 ;; End: Turn off unnecessary gui elements. - - - -
 
 ;; List Emacs command-line arguments:
@@ -166,7 +161,6 @@
 
 ;; So that Emacs can find the home directory files (desktop, etc.):
 (add-to-list 'load-path (expand-file-name "~/.emacs"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.desktops"))
 
 ;; Specific Packages:
@@ -199,64 +193,71 @@
 ;; - - - Begin: Package Management System: Marmalade: http://marmalade-repo.org/ - - - -
 
 (require 'package)
+;; Pinned Packages (will not be upgraded past the specified version; for example, from stable to bleeding edge).
+(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+;; Package Archives
 (add-to-list 'package-archives
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-              '("elpa" . "http://tromey.com/elpa/"))
-;; (add-to-list 'package-archives
-;;             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
 (defvar my-packages '(
                       ;;  - - - Tools
-              exec-path-from-shell
               auto-complete
+              desktop-registry           ;; For some useful help, see: https://github.com/ryuslash/desktop-registry/issues/1
               ecb
               eimp
-              w3
+              elein
+              exec-path-from-shell
               flymake
+              flymake-css
+              flymake-csslint
+              flymake-jshint
+              flymake-json
               flymake-less
               flymake-sass
-              flymake-css
               flymake-shell
-              flymake-json
-              flymake-jshint
-              flymake-csslint
-              elein
+              w3m
+              ;; - - - web (js+css+html)
+              skewer-mode
               ;; - - - JavaScript
               js2-mode
               json-mode
+              json-snatcher             ;; See https://github.com/purcell/json-snatcher and the little code block hook below.
+              jsx-mode
               ;; - - - AppleScript
               applescript-mode
               ;; - - - Other Languages
               php-mode
               ;; - - - Markup
-              web-mode
-              multi-web-mode
-              less-css-mode
-              sass-mode
               css-mode
-              markdown-mode
-              mustache-mode
               handlebars-mode
+              less-css-mode
+              markdown-mode
+              multi-web-mode
+              mustache-mode
+              sass-mode
+              web-mode
               ;; - - - Revision Control
               magit
               ;; - - - Clojure packages:
-              clojure-mode
-              clojure-test-mode
+              ac-cider
+              clojure-cheatsheet
+              clojure-mode-extra-font-locking
+              clojure-quick-repls
+              closure-lint-mode
+   	          cider
               cljsbuild-mode
-              clojurescript-mode
+              clojure-mode
               clojure-project-mode
-              cider
-              troncle
-              nrepl
-              ac-nrepl
+              clojurescript-mode
               ;; - - - Config File Types
               apache-mode
+              cmake-mode
               crontab-mode
               csv-mode
-              cmake-mode
               ;; - - - Communication
               circe
               jabber
@@ -269,6 +270,21 @@
     (package-install p)))
 ;; - - - End: Package Management System: Marmalade - - - -
 
+;; - - - Begin: Clojure
+
+;; From: https://github.com/weavejester/compojure/wiki/Emacs-indentation
+;;   Provides better indentation for Compojure macros.
+ (require 'clojure-mode)
+ (define-clojure-indent
+   (defroutes 'defun)
+   (GET 2)
+   (POST 2)
+   (PUT 2)
+   (DELETE 2)
+   (HEAD 2)
+   (ANY 2)
+   (context 2))
+;; - - - End: Clojure
 
 ;; - - - - For non-Aquamacs ports to Mac OS X, must import the shell env, and also, do the @workaround just below:
 ;; https://github.com/purcell/exec-path-from-shell
@@ -299,9 +315,6 @@
 ;; - - - End Auto-Complete
 
 (global-set-key [(control tab)] 'dabbrev-expand) ;; Standard Emacs identifier completion (autocomplete/autocompletion).
-
-;; desktop-menu mode - useful for keeping two instances of Emacs on their own desktop. From: http://www.emacswiki.org/emacs/desktop-menu.el
-(autoload 'desktop-menu "desktop-menu" "desktop-menu mode, useful if you have more than one instance of Emacs under your username." t)
 
 ;; - - - - Begin Image Section
 
@@ -425,11 +438,10 @@
 ;;
 (defvar autosave-dir
  ;; Use this by default: (concat "/tmp/emacs_autosaves/" (user-login-name) "/"))
- ;; Use this if the contents of '/tmp' can get deleted:
+ ;; This keeps autosaves safe from the contents of '/tmp' getting deleted.
  (concat "~/tmp/emacs_autosaves/" (user-login-name) "/"))
 (make-directory autosave-dir t)
-(setq auto-save-file-name-transforms `(("\\(?:[^/]*/\\)*\\(.*\\)" ,(concat
-                                                                                                                                        autosave-dir "\\1") t)))
+(setq auto-save-file-name-transforms `(("\\(?:[^/]*/\\)*\\(.*\\)" ,(concat autosave-dir "\\1") t)))
 
 ;; Put backup files (ie foo~) in one place too. (The backup-directory-alist
 ;; list contains regexp=>directory mappings; filenames matching a regexp are
@@ -442,14 +454,14 @@
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 
 ;; - - - Begin Clojure:
-(load-library "troncle")
+;;(load-library "troncle")
 ;; - - - End Clojure
 
 ;; - - - Begin ClojureScript
-(defun cljs-repl ()
-    (interactive)
-    (setq inferior-lisp-program "browser-repl")
-    (run-lisp))
+ (defun cljs-repl ()
+     (interactive)
+     (setq inferior-lisp-program "browser-repl")
+     (run-lisp))
 ;; - - - End ClojureScript
 
 ;; - - - Begin JavaScript Section
@@ -478,6 +490,18 @@
 (autoload 'json-mode "json-mode" nil t) ;; https://github.com/joshwnj/json-mode
 (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 
+;; For json-snatcher: https://github.com/purcell/json-snatcher
+;;
+;;   "Say you're looking through a large JSON file, and see a value that you want to extract programmatically.
+;;    This Emacs extension will allow you to snatch the path to this value."
+;;
+(defun js-mode-bindings ()
+  "Sets a hotkey for using the json-snatcher plugin"
+  (when (string-match  "\\.json$" (buffer-name))
+    (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
+(add-hook 'js-mode-hook 'js-mode-bindings)
+(add-hook 'js2-mode-hook 'js-mode-bindings)
+
 ;; An optional Javascript mode for shellserver to Mozilla
 ;; See https://sekhmet.acceleration.net/ADW/JsShellServer
 ;;(add-hook 'javascript-mode-hook 'js-mode)
@@ -488,9 +512,7 @@
  (setq c-default-style "bsd") ;; bsd stroustroup
  ;; (setq indent-tabs-mode t)        ;; turn on tabs for js
  ;; (setq indent-tabs-mode nil)   ;; turn off tabs for js
- (setq c-basic-offset 4)
- (lambda () (js-mode))
- (js-mode))
+ (setq c-basic-offset 4))
 
 ;; Add the above hook to the c-mode.
 ;;(add-hook 'javascript-mode-hook 'my-js-indent-setup)
@@ -498,6 +520,11 @@
 
 ;; - - - End JavaScript Section
 
+
+;; - - - JSX section: https://github.com/jsx/jsx-mode.el
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
+(autoload 'jsx-mode "jsx-mode" "JSX mode" t)
+;; - - - End jsx section
 
 ;; ----- Begin Handlebars/Mustache Template Editing Section: From https://github.com/mustache/emacs/blob/master/mustache-mode.el
 ;;     @to-do: Come up with a way in Emacs to match '.html' that's not '.mu.html'.
@@ -567,11 +594,12 @@
 
 ;; - - - Begin Markdown Mode
 ;; From http://jblevins.org/projects/markdown-mode/ :
+;; For the preview command to work, you need a markdown command.  This one is good: `sudo npm install -g marked --save` .
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.text\\'" . gfm-mode)) ;; Using github markdown flavor, vs. basic markdown-mode.
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
 ;; - - - End Markdown Mode
 
 ;; ----- Begin Sass Css Mode
@@ -639,7 +667,6 @@
 (global-set-key "\C-c\C-v" 'browse-url-of-buffer)
 (global-set-key "\C-xU" 'browse-url)
 (global-set-key "\C-xP" 'browse-url-at-point)
-(global-set-key "\e`" 'search-forward-regexp)
 (global-set-key "\e/" 'replace-regexp)
 (global-set-key "\C-xtl" 'goto-line)
 (global-set-key "\e[" 'enlarge-window)
@@ -750,13 +777,9 @@
 ;; This turns on the buffer select list in the minibuffer to make it easy to
 ;; edit any buffer in a given window or frame (C-r and C-s move backwards and forwards, respectively,
 ;; through the buffer select list).
-;;   - - - - Begin for old Emacs ( < Emacs 24.6 )
-;; (require 'iswitchb)
-;; (iswitchb-default-keybindings) ;; not available on emacs 24.6:
-;;   - - - - End for old Emacs ( < Emacs 24.6 )
-(iswitchb-mode 1)
+(ido-mode 1)
 
-;; Set a high recursion limit for parsing the long java files:
+;; Set a high recursion limit for parsing long java files:
 (setq max-specpdl-size 1000)
 
 (put 'upcase-region 'disabled nil)
@@ -861,11 +884,7 @@
 
 ;; ---------- Begin Global Whitespace Section
 
-;; indent-tabs-mode is set in the custom-set-varibles expression, below:
-;; Tab chars:
-;;  (setq indent-tabs-mode t) ;; Why anyone would want to use tabs over spaces is beyond me.
-;; No tab characters are used:
-;;  (setq indent-tabs-mode nil)
+;; See the Emacs Customization settings below for tabs vs. space, etc.
 
 ;; Set the variable default-tab-width.
 (setq default-tab-width 4)
@@ -878,12 +897,14 @@
 
 ;; ---------- End Global Whitespace Section
 
-;; This enables saving the current desktop on shutdown.  The ESC-x desktop-save
-;; command must be given once for this to work in perpetuity.
-(desktop-save-mode 1)
-;; This will save the desktop when Emacs is idle, giving some protection against
-;; losing your desktop to a crash.
+
+;; This will save the desktop when Emacs is idle, giving some protection against losing your desktop to a crash.
 (add-hook 'auto-save-hook (lambda () (desktop-save-in-desktop-dir)))
+
+;; ---- Workarounds for variables incorrectly marked as unsafe (this workaround removes the dialog that Emacs inserts otherwise when these values are set in dir-locals.el)
+(put 'jsx-indent-level 'safe-local-variable #'integerp)
+(put 'css-indent-level 'safe-local-variable #'integerp)
+;; ---- End Workarounds for variables incorrectly marked as unsafe
 
 ;; --------- ** My custom hand-entered additions end here. **
 
@@ -895,26 +916,37 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["black" "red" "green" "yellow" "pink" "magenta" "cyan" "white"])
+ '(ansi-color-names-vector
+   ["black" "red" "green" "yellow" "pink" "magenta" "cyan" "white"])
  '(appt-message-warning-time 60 t)
  '(calculator-number-digits 10)
  '(case-fold-search t)
  '(column-number-mode t)
+ '(css-indent-offset 2)
  '(current-language-environment "Latin-1")
  '(default-input-method "latin-1-prefix")
+ '(desktop-path (quote ("~/.emacs.d/")))
+ '(desktop-registry-registry (quote (("vibrashank" . "/Users/cbalz/.emacs.d"))))
  '(dired-recursive-deletes (quote top))
  '(display-time-mode t)
  '(font-use-system-font t)
  '(frame-background-mode nil)
  '(global-font-lock-mode t nil (font-lock))
  '(indent-tabs-mode nil)
+ '(js2-basic-offset 2)
+ '(json-reformat:indent-width 2)
+ '(jsx-indent-level 2)
  '(mail-host-address "")
+ '(markdown-command "/usr/local/lib/node_modules/marked/bin/marked")
  '(midnight-delay 34200)
  '(midnight-hook (quote (update-my-calendar)))
  '(midnight-mode t nil (midnight))
  '(printer-name "USB001")
- '(safe-local-variable-values (quote ((css-indent-level . 4))))
- '(show-paren-mode t nil (paren))
+ '(safe-local-variable-values
+   (quote
+    ((css-indent-offset . 2)
+     (js2-basic-offset . 4)
+     (css-indent-level . 4))))
  '(speedbar-show-unknown-files t)
  '(speedbar-use-images t)
  '(standard-indent 4)
@@ -922,7 +954,8 @@
  '(uniquify-buffer-name-style nil nil (uniquify))
  '(user-full-name "Christopher M. Balz")
  '(w3-default-homepage "http://www.yahoo.com")
- '(which-function-mode nil nil (which-func)))
+ '(which-function-mode nil nil (which-func))
+ '(word-wrap t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -932,3 +965,4 @@
  '(speedbar-file-face ((t (:background "black" :foreground "yellow1"))))
  '(speedbar-selected-face ((((class color) (background dark)) (:background "black" :foreground "red" :underline t))))
  '(speedbar-tag-face ((t (:background "black" :foreground "Orange")))))
+(put 'dired-find-alternate-file 'disabled nil)
