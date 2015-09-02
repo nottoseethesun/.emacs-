@@ -1,6 +1,10 @@
-;; This is a web programmer's .emacs file for GNU Emacs on Mac OS X 7+ and Ubuntu 12.04 LTS.
+;; This is a web programmer's .emacs file for GNU Emacs on Mac OS X 10 (with Homebrew's coreutils, or similar) and Ubuntu 12.04 LTS.
 ;;
-;; Requires Emacs version 24.3.x or better.
+;; Pre-requisites
+;;
+;;   * Requires Emacs version 24.3.x or better.
+;;   * OS X: On OS X, Emacs requires some Gnu utilities: Install Homebrew, and do `brew install coreutils`.
+;;     Afterwards, you can set your executables to be owned by root.  Alternatively, you can use MacPorts, but that usually requires a slow, local build from source.
 ;;
 ;; This file has been tested on:
 ;;
@@ -23,7 +27,7 @@
 ;;
 ;;             http://www.gnu.org/directory/GNU/emacs.html
 ;;
-;; This Document Last Modified: 2015-08-01.
+;; This Document Last Modified: 2015-09-02.
 ;;
 ;; Portability: Comment out code for one platform and comment in the code for another.  For example, this file is currently set for Mac OS X Unix.
 ;;
@@ -243,12 +247,12 @@
               ;; - - - Revision Control
               magit
               ;; - - - Clojure packages:
-              ac-cider
               clojure-cheatsheet
               clojure-mode-extra-font-locking
               clojure-quick-repls
               closure-lint-mode
-   	          cider
+   	      cider
+              ac-cider
               cljsbuild-mode
               clojure-mode
               clojure-project-mode
@@ -565,8 +569,6 @@
 ;;   - - - Begin html5 section (also added to load path in custom directory, above).
 (eval-after-load "rng-loc"
   '(add-to-list 'rng-schema-locating-files "/opt/local/share/emacs/site-lisp/html5/html5-el-master/schemas.xml"))
-
-(require 'whattf-dt)
 ;;   - - - End html5 section (also added to load path in custom directory, above).
 ;;
 ;; ----- End XML--XSL--HTML Editing Section
